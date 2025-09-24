@@ -50,7 +50,7 @@ class GAPIX(ABC):
 
     def generate_schema(
         self,
-        overrides: list[gapi.Override],
+        overrides: list[gapi.Override] | None = None,
         *,
         skip_conversions: bool = False,
     ) -> None:
