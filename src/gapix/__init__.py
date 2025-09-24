@@ -12,9 +12,6 @@ logger = logging.getLogger(__name__)
 
 class GAPIX(ABC):
     @abstractmethod
-    def endpoint_name(self) -> str: ...
-
-    @abstractmethod
     def output_file(self) -> Path: ...
 
     @abstractmethod
