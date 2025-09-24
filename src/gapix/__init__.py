@@ -48,10 +48,16 @@ class GAPIX(ABC):
         new_json_path.parent.mkdir(parents=True, exist_ok=True)
         new_json_path.write_text(json.dumps(data, indent=2))
 
-    def generate_schema(self, overrides: list[gapi.Override]) -> None:
+    def generate_schema(
+        self,
+        overrides: list[gapi.Override],
+        *,
+        skip_conversions: bool = False,
+    ) -> None:
         """Generate a Pydantic schema from test files for a given endpoint."""
         gapi.generate_from_folder(
             self.input_folder(),
             self.output_file(),
             overrides=overrides,
+            skip_conversions=skip_conversions,
         )
