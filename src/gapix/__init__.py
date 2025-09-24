@@ -18,9 +18,6 @@ class GAPIX(ABC):
     @abstractmethod
     def input_folder(self) -> Path: ...
 
-    @abstractmethod
-    def temp_file(self) -> Path: ...
-
     def remove_redundant_files(self) -> None:
         good_schema_text = self.output_file().read_text()
 
