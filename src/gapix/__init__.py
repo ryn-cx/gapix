@@ -1,5 +1,6 @@
 import json
 import logging
+import tempfile
 import uuid
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -26,18 +27,22 @@ class GAPIX(ABC):
         # Loop through all of the files while ignoring a specific file each time to make
         # sure each file is necessary to generate the schema.
         input_files = list(self.input_folder().glob("*.json"))
+
+        if not input_files:
+            msg = f"No input files found in {self.input_folder()}"
+            raise FileNotFoundError(msg)
+
         for i, _ in enumerate(input_files):
             test_files = input_files[:i] + input_files[i + 1 :]
-            gapi.generate_from_files(test_files, self.temp_file())
-            test_schema_text = self.temp_file().read_text()
+            with tempfile.NamedTemporaryFile(delete_on_close=False) as fp:
+                gapi.generate_from_files(test_files, Path(fp.name))
+                test_schema_text = Path(fp.name).read_text()
 
-            if test_schema_text == good_schema_text:
-                logger.info("File %s is redundant", input_files[i].name)
-                input_files[i].unlink()
-                self.remove_redundant_files()
-                return
-
-        self.temp_file().unlink()
+                if test_schema_text == good_schema_text:
+                    logger.info("File %s is redundant", input_files[i].name)
+                    input_files[i].unlink()
+                    self.remove_redundant_files()
+                    return
 
     def add_test_file(self, data: dict[str, Any]) -> None:
         """Add a new test file for a given endpoint."""
