@@ -135,7 +135,7 @@ wheels = [
 [[package]]
 name = "gapi"
 version = "0.1.0"
-source = { git = "https://github.com/ryn-cx/gapi#78946888e3aa0da10e281af980d6d88f15adc37d" }
+source = { git = "https://github.com/ryn-cx/gapi#0feccab76b0321dd845e1011f9b297532c71aa1a" }
 dependencies = [
     { name = "datamodel-code-generator" },
     { name = "degenson" },
