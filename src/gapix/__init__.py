@@ -18,6 +18,9 @@ class GAPIX(ABC):
     @abstractmethod
     def input_folder(self) -> Path: ...
 
+    def class_name(self) -> str | None:
+        return None
+
     def remove_redundant_files(self) -> None:
         good_schema_text = self.output_file().read_text()
 
@@ -51,7 +54,6 @@ class GAPIX(ABC):
     def generate_schema(
         self,
         overrides: list[gapi.Override] | None = None,
-        class_name: str | None = None,
         *,
         skip_conversions: bool = False,
     ) -> None:
@@ -59,7 +61,7 @@ class GAPIX(ABC):
         gapi.generate_from_folder(
             self.input_folder(),
             self.output_file(),
-            class_name=class_name,
+            class_name=self.class_name(),
             overrides=overrides,
             skip_conversions=skip_conversions,
         )
